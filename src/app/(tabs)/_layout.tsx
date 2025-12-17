@@ -1,5 +1,10 @@
 import { Tabs } from "expo-router";
 import Feather from '@expo/vector-icons/Feather';
+import "../../../global.css";
+
+
+
+
 export default function TabsLayout() {
     return <Tabs screenOptions={ {
         tabBarShowLabel:false,

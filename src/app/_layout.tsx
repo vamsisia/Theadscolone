@@ -6,6 +6,7 @@ const myTheme = {
     colors : {
         ...DarkTheme.colors,
         primary : 'white',
+        card :'#101010',
     }
 }
 // 1. The Detective: "Is the phone in dark mode?"
