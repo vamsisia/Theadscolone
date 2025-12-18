@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import Feather from '@expo/vector-icons/Feather';
-import "../../../global.css";
+import "../../../../global.css";
 
 
 
