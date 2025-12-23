@@ -13,7 +13,7 @@ export default function NewPostScreeen(){
         if(!user || !text) {
             return;
         }
-        const {data, error} =await Supabase.from('Post').insert({content : text , user_id : user.id })
+        const {data, error} =await Supabase.from('post').insert({content : text , user_id : user.id })
 
 
         if(error){
