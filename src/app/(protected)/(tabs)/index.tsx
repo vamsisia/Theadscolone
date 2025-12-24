@@ -1,32 +1,44 @@
 
-import { FlatList, Text, View } from 'react-native';
-import { dummyPosts } from '@/dummyData';
+import { ActivityIndicator, FlatList, Text} from 'react-native';
 import PostListItem from '@/app/components/PostListItems';
 import {Link} from 'expo-router';
-import { useEffect, useState } from 'react';
-import {Post} from '@/types'
 import { Supabase } from '@/lib/supabase';
+import { useQuery } from '@tanstack/react-query';
+
+const fetchPosts = async() => {
+  const {data} = await Supabase
+  .from('posts')
+  .select("*, user:profiles(*)")
+  .throwOnError();
+  return data;
+}
+
 
 export default function HomeScreen() {
+  
+  const  {data :posts, error, isLoading} = useQuery(
+    {
+        queryKey : ['posts'],
+        queryFn :fetchPosts,
+    
+      },)
 
-  const [posts, setPosts]  = useState<Post[]>([]); 
+    //const [posts, setPosts] = useState<Post[]>([]);
 
-
-  useEffect( () => {
-    const fetchPosts = async()=> {
-      const {data, error} = await  Supabase.from('post').select('*  , user:profiles(*)');
-
-      if(error) {
-        console.error(error);
-      }
-      setPosts(data as Post[]);
-    };
-    fetchPosts();
-
-  }, []);
+ // console.log(JSON.stringify(posts, null, 2));
 
 
-  console.log(JSON.stringify(posts, null, 2));
+ if(isLoading){
+  return <ActivityIndicator/>
+ }
+
+ if(error){
+
+  return <Text className='text-red-500'>
+   {error.message}
+  </Text>
+
+ }
 
   return (
     <FlatList
