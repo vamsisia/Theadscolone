@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const fetchPosts = async() => {
   const {data} = await Supabase
-  .from('posts')
+  .from('post')
   .select("*, user:profiles(*)")
   .throwOnError();
   return data;
