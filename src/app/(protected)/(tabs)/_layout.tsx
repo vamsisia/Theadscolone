@@ -9,7 +9,7 @@ export default function TabsLayout() {
     return <Tabs screenOptions={ {
         tabBarShowLabel:false,
     }}> 
-        <Tabs.Screen name = 'index' options={{title:'Home', 
+        <Tabs.Screen name = '(home)' options={{title:'Home',  headerShown:false,
             tabBarIcon : ({size ,color}) =>  <Feather name="home" size={size} color={color} /> }} />
         <Tabs.Screen name = 'search' options={{title:'Search' , 
              tabBarIcon : ({size ,color}) =>  <Feather name="search" size={size} color={color} /> }} />

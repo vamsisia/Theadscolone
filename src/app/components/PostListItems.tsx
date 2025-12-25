@@ -3,6 +3,7 @@ import {Ionicons} from '@expo/vector-icons'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {Tables} from '@/types/database.types'
+import { Link } from 'expo-router';
 
 dayjs.extend(relativeTime);
 
@@ -14,7 +15,8 @@ type PostWithUser = Tables<'post'>
 
 export default function PostListItem({ post }: { post: PostWithUser}){
     return (
-        <View className='flex-row p-4 border-b border-gray-800/70'> 
+      <Link href= {`(home)/posts/${post.id}`} asChild>
+        <Pressable className='flex-row p-4 border-b border-gray-800/70'> 
             {/*User Avatar*/}
                 <View className='mr-3'>
                     <Image
@@ -63,6 +65,7 @@ export default function PostListItem({ post }: { post: PostWithUser}){
           </Pressable>
         </View>
       </View>
-    </View>
+    </Pressable>
+    </Link>
   );
 }
