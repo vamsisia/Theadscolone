@@ -1,5 +1,6 @@
 import { createClient} from '@supabase/supabase-js';
 import AsyncStorage  from '@react-native-async-storage/async-storage'
+import {Database} from '@/types/database.types'
 
 import {AppState} from 'react-native';
 
@@ -11,7 +12,7 @@ if(!supabaseUrl || !supabaseAnonKey){
    throw new Error('Missing Supabase environment variables');
 }
 
-export const Supabase = createClient(
+export const Supabase = createClient<Database>(
     supabaseUrl, supabaseAnonKey,
     {
         auth : {
