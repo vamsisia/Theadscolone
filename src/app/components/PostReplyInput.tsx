@@ -2,7 +2,7 @@ import { View ,TextInput } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useState } from "react";
 import { useAuth} from '@/providers/AuthProvider';
-import {useMutation } from '@tanstack/react-query';
+import {useMutation , useQueryClient } from '@tanstack/react-query';
 import { createPost } from "@/services/post"; 
 
 
@@ -20,13 +20,13 @@ export default function PostReplyInput( {post_id} : PostReplyInputProp ){
     const  {user} = useAuth();
 
 
-    // const queryClient = useQueryClient();
+     const queryClient = useQueryClient();
 
    const {mutate , isPending , error} = useMutation({
         mutationFn: ()=> createPost({content:text ,user_id : user!.id , parent_id : post_id} ),
         onSuccess : () => {
             setText('');
-          //  queryClient.invalidateQueries({queryKey : ['posts']});
+            queryClient.invalidateQueries({queryKey : ['post', post_id, 'replies']});
             
         },
         onError:(error) =>{
