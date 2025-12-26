@@ -1,5 +1,4 @@
 import PostListItem from '@/app/components/PostListItems';
-import { Supabase } from '@/lib/supabase';
 import { useQuery } from '@tanstack/react-query';
 import { useLocalSearchParams } from 'expo-router';
 import { ActivityIndicator, FlatList } from 'react-native';
@@ -36,9 +35,6 @@ export default function postdetails(){
     if(error || !post) {
         return <Text className='text-red-600' >Post not found</Text>
     }
-
-    console.log(JSON.stringify(replies,null,2));
-
     return (
         <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

@@ -26,7 +26,7 @@ export default function PostReplyInput( {post_id} : PostReplyInputProp ){
         mutationFn: ()=> createPost({content:text ,user_id : user!.id , parent_id : post_id} ),
         onSuccess : () => {
             setText('');
-            queryClient.invalidateQueries({queryKey : ['post', post_id, 'replies']});
+            queryClient.invalidateQueries({queryKey : ['post']})
             
         },
         onError:(error) =>{

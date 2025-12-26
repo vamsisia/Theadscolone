@@ -2,6 +2,17 @@ import { Supabase } from "@/lib/supabase";
 import { TablesInsert } from "@/types/database.types";
 
 
+
+export const fetchPosts = async() => {
+    const {data} = await Supabase
+    .from('post')
+    .select("*,user:profiles(*) , replies : post(count)")
+    .throwOnError();
+    return data;
+  }
+  
+
+
 type postTable = TablesInsert<'post'>;
 
 export const createPost = async( post : postTable  )=> {
@@ -17,7 +28,7 @@ export const createPost = async( post : postTable  )=> {
 export const getPostById = async(id : string) => {
     const {data , error} = await Supabase
     .from("post")
-    .select('*,user:profiles(*)' )
+    .select('*,user:profiles(*) ,replies : post(count)' )
     .eq('id', id)
     .single()
     .throwOnError()
@@ -29,8 +40,8 @@ export const getPostById = async(id : string) => {
 export const getPostByReplies = async(id : string) => {
     const {data , error} = await Supabase
     .from("post")
-    .select('*,user:profiles(*)' )
-    .eq('parent_id', id)
+    .select('*,user:profiles(*),  replies : post(count)' )
+    .eq('parent_id ', id)
     .throwOnError()
 
     return data;
