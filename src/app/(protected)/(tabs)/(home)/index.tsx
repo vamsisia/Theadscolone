@@ -1,7 +1,6 @@
 
 import { ActivityIndicator, FlatList, Text} from 'react-native';
 import PostListItem from '@/app/components/PostListItems';
-import {Link} from 'expo-router';
 import { Supabase } from '@/lib/supabase';
 import { useQuery } from '@tanstack/react-query';
 
