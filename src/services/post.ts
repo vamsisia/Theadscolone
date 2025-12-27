@@ -7,6 +7,7 @@ export const fetchPosts = async() => {
     const {data} = await Supabase
     .from('post')
     .select("*,user:profiles(*) , replies : post(count)")
+    .order("created_at", {ascending : false})
     .throwOnError();
     return data;
   }
