@@ -5,6 +5,7 @@ import { ActivityIndicator, FlatList } from 'react-native';
 import {View, Text , KeyboardAvoidingView , Platform} from 'react-native';
 import PostReplyInput from '@/app/components/PostReplyInput';
 import {getPostById , getPostByReplies} from '@/services/post' 
+import PostDetails from '@/app/components/PostDetails';
 
 
 
@@ -15,10 +16,19 @@ export default function postdetails(){
         {
             queryKey : ['post', id],
             queryFn : () =>getPostById(id),
-            staleTime :1000 * 60 *5
+            staleTime : 1000 * 60 * 5,
         },
         
     );
+
+    
+    const {data : parent}  = useQuery(
+        {
+            queryKey : ['Post' , id,  'parent' ],
+            queryFn : ()=> getPostById(post?.parent_id || ''),
+            enabled : !! post?.parent_id 
+        }
+    )
 
     const {data :replies}  =  useQuery(
         {
@@ -33,8 +43,9 @@ export default function postdetails(){
     }
 
     if(error || !post) {
-        return <Text className='text-red-600' >Post not found</Text>
+        return <Text className='text-red-600' >Post not found : {error?.message} </Text>
     }
+
     return (
         <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -45,7 +56,16 @@ export default function postdetails(){
             <FlatList
                data={ replies || []}
                renderItem={({item}) => <PostListItem post={item} />}
-               ListHeaderComponent={<PostListItem post={post} />}
+               ListHeaderComponent={
+                <>
+                {parent && <PostListItem post={parent}  isLastInGroup={false}/> }
+               <PostDetails post={post} />
+               <Text className='text-white p-4 font-bold text-lg  border-b  border-neutral-900'>
+                Replies
+               </Text>
+               </>
+               
+               }
                
             />
             <PostReplyInput  post_id = {id} />

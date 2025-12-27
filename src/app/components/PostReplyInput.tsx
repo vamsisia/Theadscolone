@@ -42,6 +42,7 @@ export default function PostReplyInput( {post_id} : PostReplyInputProp ){
                 value={text}
                 onChangeText={setText}
                 placeholder="Add to threads ..."
+                placeholderTextColor="gray"
                 className="bg-gray-800 flex-1 text-white"
                 multiline
 

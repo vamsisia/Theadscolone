@@ -16,28 +16,20 @@ type PostWithUser = Tables<'post'>
   }[];
 };
 
-export default function PostListItem({ post, isLastInGroup=true }: { post: PostWithUser , isLastInGroup? : Boolean}){
+export default function PostDetails({ post }: { post: PostWithUser}){
     return (
       <Link href= {`(home)/posts/${post.id}`} asChild>
-        <Pressable className= {`flex-row p-4  ${isLastInGroup ? 'border-b border-gray-800/70' : " " } ` }> 
+        <Pressable className=' p-4 border-b border-gray-800/70'> 
             {/*User Avatar*/}
-                <View className='mr-3 items-center  gap-3'>
+                <View className='flex-1 flex-row items-center gap-3'>
                     <Image
                      source={{ uri: post.user?.avatar_url || ''
                      }}
                     className='rounded-full w-12 h-12'
                     />
-                    {!isLastInGroup  && 
-                     <View
-                      className='flex-1 w-[2px] rounded-full bg-neutral-700 translate-y-2 scale-150'>
-                        </View>}
+
+                   {/*User info*/}
                     
-                </View>
-
-
-                 {/*content*/}
-        <View className='flex-1'>
-                <View className='flex-row items-center'>
                     <Text className='text-white font-bold mr-2'>
                         {post.user?.username}
                     </Text>
@@ -47,13 +39,15 @@ export default function PostListItem({ post, isLastInGroup=true }: { post: PostW
                     </Text>
 
                 </View>
-
-                <Text className='text-white mt-2 mb-3'>
+            
+                 {/*content*/}
+        <View className='flex-1 '>
+                <Text className='text-white mt-2 mb-2'>
                     {post.content}
                 </Text>
 
                 {/* Interaction Buttons */}
-        <View className='flex-row gap-4 mt-2'>
+        <View className='flex-row gap-4'>
           <Pressable className='flex-row items-center'>
             <Ionicons name='heart-outline' size={20} color='#d1d5db' />
             <Text className='text-gray-300 ml-2'>0</Text>

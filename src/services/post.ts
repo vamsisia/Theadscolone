@@ -28,7 +28,7 @@ export const createPost = async( post : postTable  )=> {
 export const getPostById = async(id : string) => {
     const {data , error} = await Supabase
     .from("post")
-    .select('*,user:profiles(*) ,replies : post(count)' )
+    .select('*,user:profiles(*),replies:post(count)')
     .eq('id', id)
     .single()
     .throwOnError()
