@@ -6,13 +6,12 @@ import {getPostByUserId } from "@/services/post";
 import PostListItem from "@/app/components/PostListItems";
 import { getProfileById } from "@/services/profile";
 import ProfileHeader from "@/app/components/ProfileHeader";
+import { Link } from "expo-router";
 
 export default function profile() {
 
 
-     const {user}=  useAuth()
-
-     console.log(JSON.stringify(user, null, 2 ));
+     const {user}=  useAuth();
 
      const {data :profile ,isLoading, error} = useQuery({
         queryKey : ['post', {user_id : user?.id}],
@@ -37,6 +36,7 @@ export default function profile() {
 
 
     return (
+      
         <View className="flex-1 justify-center">
                 <FlatList 
                 data={profile}
@@ -46,14 +46,13 @@ export default function profile() {
                 <ProfileHeader />
                 <Text className="text-white text-lg font-bold mt-4 pl-9">Your posts</Text>
                 <View className="mt-2 border-b h-2 border-neutral-800">
-
                 </View>
                 </>
             }
                   />
-            <Text onPress={()=> Supabase.auth.signOut()}  className="text-white text-3xl text-center font-bold">
+            {/* <Text onPress={()=> Supabase.auth.signOut()}  className="text-white text-3xl text-center font-bold">
                 Sign Out
-            </Text>
+            </Text> */}
         </View>
     )
 }

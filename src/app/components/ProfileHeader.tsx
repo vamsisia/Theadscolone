@@ -3,6 +3,7 @@ import {getProfileById} from '@/services/profile'
 import { useAuth } from '@/providers/AuthProvider'
 import {useQuery } from '@tanstack/react-query'
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
+import { Link } from 'expo-router'
 
 
 export default function ProfileHeader(){
@@ -43,9 +44,11 @@ export default function ProfileHeader(){
 
 
         <View className='flex-row gap-2'>
+            <Link href='/profile/Edit' asChild >
             <Pressable className='flex-1 py-2 rounded-full bg-neutral-800'>
                 <Text className='text-center text-neutral-200'>Edit Profile</Text>
             </Pressable>
+            </Link>
 
             <Pressable className='flex-1 py-2 rounded-full bg-neutral-800'>
                 <Text className='text-center text-neutral-200'>Share Profile</Text>

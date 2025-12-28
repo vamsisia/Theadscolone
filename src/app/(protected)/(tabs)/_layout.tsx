@@ -30,7 +30,7 @@ export default function TabsLayout() {
         <Tabs.Screen name = 'notification' options={{title:'Notification',
             tabBarIcon : ({size ,color}) =>  <Feather name="heart" size={size} color={color} />
         }} />
-        <Tabs.Screen name = 'profile' options={{title:'Profile', 
+        <Tabs.Screen name = 'profile' options={{title:'Profile',  headerShown : false,
             tabBarIcon : ({size ,color}) =>  <Feather name="user" size={size} color={color} />
 
         }} />

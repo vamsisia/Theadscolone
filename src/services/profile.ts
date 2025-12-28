@@ -12,3 +12,6 @@ export const getProfileById = async(id : string) => {
 
     return data;
 }
+
+
+
