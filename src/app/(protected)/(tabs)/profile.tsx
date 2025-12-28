@@ -41,7 +41,15 @@ export default function profile() {
                 <FlatList 
                 data={profile}
                 renderItem={({item}) => <PostListItem post={item} />}
-                ListHeaderComponent={<ProfileHeader />}
+                ListHeaderComponent={
+                <>
+                <ProfileHeader />
+                <Text className="text-white text-lg font-bold mt-4 pl-9">Your posts</Text>
+                <View className="mt-2 border-b h-2 border-neutral-800">
+
+                </View>
+                </>
+            }
                   />
             <Text onPress={()=> Supabase.auth.signOut()}  className="text-white text-3xl text-center font-bold">
                 Sign Out
