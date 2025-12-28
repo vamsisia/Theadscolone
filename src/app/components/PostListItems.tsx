@@ -32,10 +32,7 @@ export default function PostListItem({ post, isLastInGroup=true }: { post: PostW
                      <View
                       className='flex-1 w-[2px] rounded-full bg-neutral-700 translate-y-2'>
                         </View>}
-                    
                 </View>
-
-
                  {/*content*/}
         <View className='flex-1'>
                 <View className='flex-row items-center'>

@@ -24,7 +24,7 @@ export default function postdetails(){
     
     const {data : parent}  = useQuery(
         {
-            queryKey : ['Post' , id,  'parent' ],
+            queryKey : ['post' , id,  'parent' ],
             queryFn : ()=> getPostById(post?.parent_id || ''),
             enabled : !! post?.parent_id 
         }

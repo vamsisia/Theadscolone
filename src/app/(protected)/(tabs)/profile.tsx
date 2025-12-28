@@ -1,9 +1,48 @@
-import { Text , View } from "react-native";
+import { ActivityIndicator, FlatList, Text , View } from "react-native";
 import { Supabase } from '@/lib/supabase';
+import { useAuth } from "@/providers/AuthProvider";
+import {  useQuery } from "@tanstack/react-query";
+import {getPostByUserId } from "@/services/post";
+import PostListItem from "@/app/components/PostListItems";
+import { getProfileById } from "@/services/profile";
+import ProfileHeader from "@/app/components/ProfileHeader";
 
 export default function profile() {
+
+
+     const {user}=  useAuth()
+
+     console.log(JSON.stringify(user, null, 2 ));
+
+     const {data :profile ,isLoading, error} = useQuery({
+        queryKey : ['post', {user_id : user?.id}],
+        queryFn : ()=>  getPostByUserId(user!.id),
+     }) 
+
+
+     const {data : userData}= useQuery({
+        queryKey : ['Post' , user?.id ],
+        queryFn : ()=>getProfileById(user!.id)
+
+     })
+
+
+     if (isLoading){
+        <ActivityIndicator />
+     }
+
+     if (error){
+        console.error(`{error.message}`)
+     }
+
+
     return (
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1 justify-center">
+                <FlatList 
+                data={profile}
+                renderItem={({item}) => <PostListItem post={item} />}
+                ListHeaderComponent={<ProfileHeader />}
+                  />
             <Text onPress={()=> Supabase.auth.signOut()}  className="text-white text-3xl text-center font-bold">
                 Sign Out
             </Text>

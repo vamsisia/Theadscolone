@@ -33,7 +33,16 @@ export const getPostById = async(id : string) => {
     .eq('id', id)
     .single()
     .throwOnError()
+    return data;
+}
 
+
+export const getPostByUserId  = async(id : string) => {
+    const {data , error} = await Supabase.from('post')
+    .select('*, user:profiles(*), replies:post(count)')
+    .eq("user_id",id)
+    .order("created_at", {ascending : false})
+    .throwOnError()
     return data;
 }
 
