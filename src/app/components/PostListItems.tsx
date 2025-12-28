@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import {Tables} from '@/types/database.types'
 import { Link } from 'expo-router';
+import { Supabase } from '@/lib/supabase';
 
 dayjs.extend(relativeTime);
 
@@ -29,7 +30,7 @@ export default function PostListItem({ post, isLastInGroup=true }: { post: PostW
                     />
                     {!isLastInGroup  && 
                      <View
-                      className='flex-1 w-[2px] rounded-full bg-neutral-700 translate-y-2 scale-150'>
+                      className='flex-1 w-[2px] rounded-full bg-neutral-700 translate-y-2'>
                         </View>}
                     
                 </View>
@@ -51,6 +52,17 @@ export default function PostListItem({ post, isLastInGroup=true }: { post: PostW
                 <Text className='text-white mt-2 mb-3'>
                     {post.content}
                 </Text>
+
+
+                {post.images &&  (
+                  <View className='flex-row gap-2 mt-2'>
+                  {post.images.map((image) => (
+                    <Image  className='w-full aspect-[4/3] rounded-lg'
+                    key={image}
+                    source={{uri : Supabase.storage.from('media').getPublicUrl(image).data.publicUrl }} />
+                  ))}
+                  </View>
+                ) }
 
                 {/* Interaction Buttons */}
         <View className='flex-row gap-4 mt-2'>

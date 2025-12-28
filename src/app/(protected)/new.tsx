@@ -7,28 +7,26 @@ import {useMutation, useQueryClient} from '@tanstack/react-query';
 import { router } from 'expo-router';
 import Entypo from '@expo/vector-icons/Entypo';
 import * as ImagePicker from 'expo-image-picker';
+import { TablesInsert } from '@/types/database.types';
 
 
-
-
-const createPost = async(content : string , user_id:string)=> {
+type postTable = TablesInsert<'post'>;
+const createPost = async(post : postTable)=> {
     const {data} = await Supabase
     .from('post')
-    .insert({content , user_id })
+    .insert(post)
     .select("*")
     .throwOnError();
     return data;
-
 }
 
 
 export default function NewPostScreeen(){
-
     const [text , setText]  = useState('');
     const  {user} = useAuth();
 
 
-    const [image , setImage] = useState<string | null>(null);
+    const [image , setImage] = useState<ImagePicker.ImagePickerAsset| null>(null);
 
     const queryClient = useQueryClient();
 
@@ -37,7 +35,13 @@ export default function NewPostScreeen(){
 
 
    const {mutate , isPending , error} = useMutation({
-        mutationFn: ()=> createPost(text, user!.id),
+        mutationFn: async()=>{
+            let imagepath = null
+            if(image){
+               imagepath  = await  uploadImage();
+             }
+          return createPost( {content: text, user_id: user!.id , images : imagepath ? [imagepath]  : null})
+        },
         onSuccess : () => {
             setText('');
             router.back();
@@ -50,6 +54,7 @@ export default function NewPostScreeen(){
     })
 
     const pickImage = async() =>{
+
 
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -64,16 +69,33 @@ export default function NewPostScreeen(){
       quality: 1,
     });
 
-    console.log(result);
+    //console.log(result);
 
     if (!result.canceled) {
-        setImage(result.assets[0].uri);
+        setImage(result.assets[0]);
 
         const width = result.assets[0].width;
         const height = result.assets[0].height;
         setAspectRatio(width / height);
         }
 }
+
+
+const uploadImage = async()=> {
+    if(!image) return
+    const arraybuffer = await fetch(image.uri)?.then((res)=> res.arrayBuffer());
+    const fileExt  = image.uri?.split('.').pop()?.toLowerCase() ?? 'jpeg';
+    const path = `${Date.now()}.${fileExt}`;
+    const {data, error : uploadError} = await Supabase.storage.from('media').upload(path, arraybuffer,  {
+        contentType : image.mimeType ?? 'image/jpeg'
+     } );
+     if(uploadError){
+        throw uploadError;
+     }
+
+     return data.path;
+}
+
 
     return(
         <SafeAreaView  edges={['bottom']}  className='flex-1 p-4'>
@@ -105,7 +127,7 @@ export default function NewPostScreeen(){
         {image && 
         (  <Pressable onPress={pickImage}>
              <Image 
-            source={{ uri: image }}  
+            source={{ uri: image.uri }}  
         style={{ aspectRatio: aspectRatio }} 
         className='w-full  rounded-lg mt-2' 
         resizeMode ="contain"/></Pressable> )  }
