@@ -53,9 +53,7 @@ export default function NewPostScreeen(){
         }
     })
 
-    const pickImage = async() =>{
-
-
+const pickImage = async() =>{
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (!permissionResult.granted) {

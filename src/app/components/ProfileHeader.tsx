@@ -4,16 +4,25 @@ import { useAuth } from '@/providers/AuthProvider'
 import {useQuery } from '@tanstack/react-query'
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
 import { Link } from 'expo-router'
+import { Supabase } from '@/lib/supabase'
 
 
 export default function ProfileHeader(){
      const{user}  = useAuth();
+
     const {data : profilesInfo}  = useQuery({
 
-        queryKey : ['post', user?.id],
+        queryKey: ['profile', user?.id],
         queryFn : () => getProfileById(user!.id)
 
      })
+
+
+     const avatar_url = Supabase.storage.from('avatars').getPublicUrl(profilesInfo?.avatar_url || '').data.publicUrl
+
+
+
+
     return (
         <View className='p-4 gap-4'>
         <View className='flex-row justify-between gap-2'>
@@ -32,7 +41,7 @@ export default function ProfileHeader(){
     {profilesInfo?.avatar_url ? (
       // 1. If URL exists, show Image
       <Image 
-        source={{ uri: profilesInfo.avatar_url }} 
+        source={{ uri: avatar_url }} 
         className="w-20 h-20 rounded-full" 
       />
         ) : (

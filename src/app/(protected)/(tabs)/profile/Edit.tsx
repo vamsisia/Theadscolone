@@ -2,8 +2,11 @@ import { useAuth } from "@/providers/AuthProvider";
 import { getProfileById } from "@/services/profile";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { KeyboardAvoidingView, Pressable, Text, TextInput, View  , Platform , Image} from "react-native";
 import {UpdateUserData} from "@/services/post";
+import { router } from "expo-router";
+import UserAvatarPicker from "@/app/components/UserAvatarPicker";
+
 
 
 export default function EditProfile(){
@@ -13,6 +16,7 @@ export default function EditProfile(){
 
     const [name, setname] = useState('');
     const [Bio, setBio] = useState('');
+    const [avatarUrl, setAvatarUrl] = useState('');
 
     
     const {data : userData}= useQuery({
@@ -26,32 +30,42 @@ export default function EditProfile(){
      useEffect( () => {
         setname(userData?.full_name || "")
         setBio(userData?.bio || "")
+        setAvatarUrl(userData?.avatar_url || '');
 
-     } , [userData?.id])
+     } , [userData?.id] )
 
 
-
-     const {mutate , isPending , isError} = useMutation({
-        mutationFn : ()=> UpdateUserData({bio :Bio , id: user!.id , full_name:name }),
+     const {mutate , isPending } = useMutation({
+        mutationFn : ()=> UpdateUserData({bio :Bio , id: user!.id , full_name:name , avatar_url: avatarUrl}),
         onSuccess : () => {
-            queryClient.invalidateQueries({queryKey :['post', {user_id : user?.id}]})
+            queryClient.invalidateQueries({queryKey: ['profile', user?.id],})
+            queryClient.invalidateQueries({queryKey : ['post']})
+
+            router.back()
         }
      })
 
-    
+     console.log(avatarUrl);
 
     return (
-        <View className="flex-1 p-4 gap-4">
+        <KeyboardAvoidingView 
+        behavior={Platform.OS === 'ios' ? 'padding' :'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 100}
+        style =  {{ flex : 1 }}
+         >
+        <View className="flex-1  p-4 gap-4">
+            <UserAvatarPicker currentAvatar= {avatarUrl}  onUpload={setAvatarUrl} />
+
             <TextInput
             value={name}
-            onChangeText={()=> setname(name)}
+            onChangeText={setname}
             className="border-2 border-neutral-700 rounded-md p-4 text-white"
             placeholder="Enter name....."
             placeholderTextColor='gray'
             />
             <TextInput
             value={Bio}
-            onChangeText={() => setBio(Bio)}
+            onChangeText={setBio}
             className="border-2 border-neutral-700 rounded-md p-4 text-white"
             placeholder="Enter bio"
             placeholderTextColor='gray'
@@ -60,9 +74,11 @@ export default function EditProfile(){
 
         <View className='mt-auto'>
         <Pressable
-            onPress={()=>{mutate()}}
-            className= {`${isPending ? 'bg-white/50 ' :'bg-white' } bg-white self-end p-3 mr-3  px-6 rounded-full` }
-            disabled=  { isPending }
+            onPress={()=>{
+                 mutate()
+                }}
+            className= {`${isPending || !avatarUrl ? 'bg-white/50 ' :'bg-white' }  p-3 mr-3 px-6 rounded-full items-center` }
+            disabled=  { isPending  || !avatarUrl}
             >
             <Text className='text-black font-bold'>
                 save
@@ -70,5 +86,6 @@ export default function EditProfile(){
         </Pressable>
         </View>
         </View>
+        </KeyboardAvoidingView>
     )
 }

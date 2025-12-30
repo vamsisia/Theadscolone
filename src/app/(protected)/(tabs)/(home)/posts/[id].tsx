@@ -7,8 +7,6 @@ import PostReplyInput from '@/app/components/PostReplyInput';
 import {getPostById , getPostByReplies} from '@/services/post' 
 import PostDetails from '@/app/components/PostDetails';
 
-
-
 export default function postdetails(){
     const  {id} = useLocalSearchParams<{id : string}>();
 

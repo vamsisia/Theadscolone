@@ -18,13 +18,15 @@ type PostWithUser = Tables<'post'>
 };
 
 export default function PostDetails({ post }: { post: PostWithUser}){
+
+  const avatar_url = Supabase.storage.from('avatars').getPublicUrl(post.user?.avatar_url || '').data.publicUrl
     return (
       <Link href= {`(home)/posts/${post.id}`} asChild>
         <Pressable className=' p-4 border-b border-gray-800/70'> 
             {/*User Avatar*/}
                 <View className='flex-1 flex-row items-center gap-3'>
                     <Image
-                     source={{ uri: post.user?.avatar_url || ''
+                     source={{ uri: avatar_url
                      }}
                     className='rounded-full w-12 h-12'
                     />

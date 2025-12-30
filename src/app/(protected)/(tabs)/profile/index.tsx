@@ -1,12 +1,11 @@
 import { ActivityIndicator, FlatList, Text , View } from "react-native";
-import { Supabase } from '@/lib/supabase';
 import { useAuth } from "@/providers/AuthProvider";
 import {  useQuery } from "@tanstack/react-query";
 import {getPostByUserId } from "@/services/post";
 import PostListItem from "@/app/components/PostListItems";
-import { getProfileById } from "@/services/profile";
 import ProfileHeader from "@/app/components/ProfileHeader";
-import { Link } from "expo-router";
+
+
 
 export default function profile() {
 
@@ -17,13 +16,6 @@ export default function profile() {
         queryKey : ['post', {user_id : user?.id}],
         queryFn : ()=>  getPostByUserId(user!.id),
      }) 
-
-
-     const {data : userData}= useQuery({
-        queryKey : ['Post' , user?.id ],
-        queryFn : ()=>getProfileById(user!.id)
-
-     })
 
 
      if (isLoading){

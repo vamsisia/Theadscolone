@@ -18,14 +18,15 @@ type PostWithUser = Tables<'post'>
 };
 
 export default function PostListItem({ post, isLastInGroup=true }: { post: PostWithUser , isLastInGroup? : Boolean}){
+  const avatar_url = Supabase.storage.from('avatars').getPublicUrl(post.user?.avatar_url || '').data.publicUrl
+  
     return (
       <Link href= {`(home)/posts/${post.id}`} asChild>
         <Pressable className= {`flex-row p-4  ${isLastInGroup ? 'border-b border-gray-800/70' : " " } ` }> 
             {/*User Avatar*/}
                 <View className='mr-3 items-center  gap-3'>
                     <Image
-                     source={{ uri: post.user?.avatar_url || ''
-                     }}
+                     source={{ uri: avatar_url}}
                     className='rounded-full w-12 h-12'
                     />
                     {!isLastInGroup  && 
